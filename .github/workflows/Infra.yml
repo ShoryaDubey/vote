@@ -1,0 +1,35 @@
+name: Infra Deployment
+
+on: 
+    push: 
+        branches:
+            - infra
+
+jobs:
+    Terraform_Deployment:
+        runs-on: ubuntu:latest
+        permissions:
+            contents: read
+            id-token: write
+        steps:
+          - uses: actions/checkout@v4
+
+          - name: Configure AWS credentials
+            env:
+                ACCOUNT_ID: ${{ secrets.ACCOUNT_ID }}
+                ROLE_NAME: ${{ secrets.ROLE_NAME }}
+            uses: aws-actions/configure-aws-credentials@v2
+            with:
+                role-to-assume: arn:aws:iam::${{ env.ACCOUNT_ID }}:role/${{ env.ROLE_NAME }}
+                aws-region: ap-south-1
+
+          - name: Setup Terraform
+            uses: hashicorp/setup-terraform@v3
+
+          - name: Plane 
+            working-directory: ./infra
+            run: |
+                terraform init
+                terraform plan 
+                terraform apply -auto-approve
+        

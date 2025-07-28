@@ -1,0 +1,50 @@
+name: App Deployment 
+
+on: 
+    push: 
+        branches: 
+            - main
+
+jobs:
+    test:
+        runs-on: ubuntu-latest
+        strategy:
+            matrix:
+                service: [results, vote, web]
+
+        steps:
+            - uses: actions/checkout@v3
+
+            - name: Set up Docker Compose
+              run: sudo apt-get install docker-compose -y
+
+            - name: Start services
+              working-directory: ./app
+              run: docker-compose up -d --build
+
+            - name: Run tests for ${{ matrix.service }}
+              run: docker-compose exec ${{ matrix.service }} python test_${{ matrix.service }}.py
+
+            - name: Tear down
+              working-directory: ./app
+              run: docker-compose down
+
+    # Deploy_App:
+    #     runs-on: ubuntu:latest
+    #     steps: 
+    #       - uses: actions/checkout@v4
+
+    #       - name: Set up Docker Compose
+    #         run: sudo apt-get install docker-compose -y
+
+    #       - name: Build docker
+    #         working-directory: ./app
+    #         run: docker-compose build
+
+    #       - name: Push the image to docker hub
+    #         run: |
+    #             docker tag results shoryadubey/results:v1
+    #             docker tag vote shoryadubey/vote:v1
+    #             docker tag web shoryadubey/web:v1
+
+

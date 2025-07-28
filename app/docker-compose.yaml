@@ -1,0 +1,48 @@
+services:
+  db:
+    image: postgres:15
+    restart: always
+    environment:
+      POSTGRES_DB: voting
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    volumes:
+      - db-data:/var/lib/postgresql/data
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  vote:
+    build: 
+      context: ./vote_service
+      dockerfile: Dockerfile
+    depends_on:
+      - db
+    environment:
+      DB_HOST: db
+      DB_NAME: voting
+      DB_USER: user
+      DB_PASS: password
+
+  results:
+    build: 
+      context: ./results_service
+      dockerfile: Dockerfile
+    depends_on:
+      - db
+    environment:
+      DB_HOST: db
+      DB_NAME: voting
+      DB_USER: user
+      DB_PASS: password
+
+  web:
+    build: 
+      context: ./web
+      dockerfile: Dockerfile
+    depends_on:
+      - vote
+      - results
+    ports:
+      - "5000:5000"
+
+volumes:
+  db-data:
