@@ -20,12 +20,12 @@ resource "aws_security_group" "instance_sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  ingress {
-  from_port   = var.ssh_port
-  to_port     = var.ssh_port
-  protocol    = "tcp"
-  cidr_blocks = [data.vault_generic_secret.example.data["dev"]]
-  }
+  # ingress {
+  # from_port   = var.ssh_port
+  # to_port     = var.ssh_port
+  # protocol    = "tcp"
+  # cidr_blocks = [data.vault_generic_secret.example.data["dev"]]
+  # }
 
 
     egress {
@@ -40,7 +40,7 @@ resource "aws_security_group" "instance_sg" {
 resource "aws_instance" "web" {
   ami           = "ami-020cba7c55df1f615"
   instance_type = "t2.micro"
-  key_name = "testing-key.pem"
+  key_name = "testing-key"
 
   tags = {
     Name = "clucter"

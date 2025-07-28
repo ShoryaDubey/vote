@@ -56,25 +56,45 @@ jobs:
                 docker push ${{ secrets.DOCKER_USERNAME }}/web:latest
 
 
-    # Deploy_App:
-    #     runs-on: ubuntu:latest
-    #     steps: 
-    #       - uses: actions/checkout@v4
+    deploy:
+      runs-on: ubuntu-latest
 
-    #       - name: Set up Docker Compose
-    #         run: sudo apt-get install docker-compose -y
+      steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-    #       - name: Build docker
-    #         working-directory: ./app
-    #         run: docker-compose build
+      - name: Configure AWS credentials
+        env:
+            ACCOUNT_ID: ${{ secrets.ACCOUNT_ID }}
+            ROLE_NAME: ${{ secrets.ROLE_NAME }}
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+            role-to-assume: arn:aws:iam::${{ env.ACCOUNT_ID }}:role/${{ env.ROLE_NAME }}
+            aws-region: ap-south-1
 
-    #       - name: Log in to Docker Hub
-    #         run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+      - name: Download Terraform state
+        run: |
+          aws s3 cp s3://terraformstate1853/dev/terraform.tfstate terraform.tfstate
 
-    #       - name: Push the image to docker hub
-    #         run: |
-    #             docker tag results shoryadubey/results:v1
-    #             docker tag vote shoryadubey/vote:v1
-    #             docker tag web shoryadubey/web:v1
+      - name: Extract EC2 IP
+        id: extract_ip
+        run: |
+          EC2_IP=$(jq -r '.resources[] | select(.type=="aws_instance") | .instances[].attributes.public_ip' terraform.tfstate)
+          echo "EC2_IP=$EC2_IP" >> $GITHUB_ENV
+
+      - name: Add SSH Key
+        run: |
+          echo "${{ secrets.EC2_SSH_KEY }}" > key.pem
+          chmod 600 key.pem
+
+      - name: Deploy to EC2
+        run: |
+          ssh -o StrictHostKeyChecking=no -i key.pem ubuntu@$EC2_IP << 'EOF'
+            docker pull shorya1853/results
+            docker stop results || true
+            docker rm results || true
+            docker run -d -p 80:80 --name results shorya1853/results
+          EOF
+
 
 
