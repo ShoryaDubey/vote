@@ -23,7 +23,7 @@ jobs:
               run: docker-compose up -d --build
 
             - name: Run tests for ${{ matrix.service }}
-              run: docker-compose exec ${{ matrix.service }} python test_${{ matrix.service }}.py
+              run: docker-compose exec ${{ matrix.service }} python test_app.py
 
             - name: Tear down
               working-directory: ./app
