@@ -6,28 +6,50 @@ on:
             - main
 
 jobs:
-    test:
+    test-and-deploy:
         runs-on: ubuntu-latest
-        strategy:
-            matrix:
-                service: [results, vote, web]
+
+        services:
+            mongo:
+                image: mongo
+                ports:
+                - 27017:27017
 
         steps:
-            - uses: actions/checkout@v3
+            - name: Checkout Code
+              uses: actions/checkout@v3
 
-            - name: Set up Docker Compose
-              run: sudo apt-get install docker-compose -y
+            - name: Set up Docker Buildx
+              uses: docker/setup-buildx-action@v3
 
-            - name: Start services
-              working-directory: ./app
-              run: docker-compose up -d --build
+            - name: Log in to Docker Hub
+              run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
 
-            - name: Run tests for ${{ matrix.service }}
-              run: docker-compose exec ${{ matrix.service }} python test_app.py
+            - name: Test vote service
+              run: |
+                docker build -t vote-test ./vote_service
+                docker run --rm vote-test pytest
 
-            - name: Tear down
-              working-directory: ./app
-              run: docker-compose down
+            - name: Test results service
+              run: |
+                docker build -t results-test ./results_service
+                docker run --rm results-test pytest
+
+            - name: Build & Push Vote Service
+              run: |
+                docker build -t ${{ secrets.DOCKER_USERNAME }}/vote:latest ./vote_service
+                docker push ${{ secrets.DOCKER_USERNAME }}/vote:latest
+
+            - name: Build & Push Results Service
+              run: |
+                docker build -t ${{ secrets.DOCKER_USERNAME }}/results:latest ./results_service
+                docker push ${{ secrets.DOCKER_USERNAME }}/results:latest
+
+            - name: Build & Push Worker Service
+              run: |
+                docker build -t ${{ secrets.DOCKER_USERNAME }}/worker:latest ./worker_service
+                docker push ${{ secrets.DOCKER_USERNAME }}/worker:latest
+
 
     # Deploy_App:
     #     runs-on: ubuntu:latest
@@ -40,6 +62,9 @@ jobs:
     #       - name: Build docker
     #         working-directory: ./app
     #         run: docker-compose build
+
+    #       - name: Log in to Docker Hub
+    #         run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
 
     #       - name: Push the image to docker hub
     #         run: |
