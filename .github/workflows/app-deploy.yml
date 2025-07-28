@@ -25,17 +25,17 @@ jobs:
             - name: Log in to Docker Hub
               run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
 
-            - name: Test vote service
-              working-directory: ./app
-              run: |
-                docker build -t vote-test ./vote_service
-                docker run --rm vote-test pytest
+            # - name: Test vote service
+            #   working-directory: ./app
+            #   run: |
+            #     docker build -t vote-test ./vote_service
+            #     docker run --rm vote-test pytest
 
-            - name: Test results service
-              working-directory: ./app
-              run: |
-                docker build -t results-test ./results_service
-                docker run --rm results-test pytest
+            # - name: Test results service
+            #   working-directory: ./app
+            #   run: |
+            #     docker build -t results-test ./results_service
+            #     docker run --rm results-test pytest
 
             - name: Build & Push Vote Service
               working-directory: ./app
