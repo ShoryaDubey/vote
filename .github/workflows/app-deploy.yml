@@ -52,8 +52,8 @@ jobs:
             - name: Build & Push Worker Service
               working-directory: ./app
               run: |
-                docker build -t ${{ secrets.DOCKER_USERNAME }}/worker:latest ./worker_service
-                docker push ${{ secrets.DOCKER_USERNAME }}/worker:latest
+                docker build -t ${{ secrets.DOCKER_USERNAME }}/web:latest ./web
+                docker push ${{ secrets.DOCKER_USERNAME }}/web:latest
 
 
     # Deploy_App:
