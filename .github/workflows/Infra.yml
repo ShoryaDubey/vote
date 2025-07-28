@@ -4,7 +4,7 @@ on:
     push: 
         branches:
             - infra
-
+    workflow_dispatch:
 jobs:
     Terraform_Deployment:
         runs-on: ubuntu:latest
