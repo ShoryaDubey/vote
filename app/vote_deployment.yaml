@@ -36,4 +36,5 @@ spec:
   selector:
     app: vote
   ports:
-    - port: 80
+    - port: 5000
+      targetPort: 5000
