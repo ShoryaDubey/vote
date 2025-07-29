@@ -15,7 +15,7 @@ spec:
       containers:
         - name: web
           image: shorya1853/web:latest
-          imagePullPolicy: Never
+          imagePullPolicy: Always
           ports:
             - containerPort: 5000
 ---
