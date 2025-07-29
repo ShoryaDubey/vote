@@ -1,14 +1,20 @@
+# postgres-configmap
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgres-init
+data:
+  init.sql: |
+    CREATE TABLE IF NOT EXISTS votes (
+      id SERIAL PRIMARY KEY,
+      option TEXT NOT NULL
+    );
+---
+# postgres-deployment
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: postgres
-data:
-  init.sql: |
-    CREATE TABLE IF NOT EXISTS votes (
-    id SERIAL PRIMARY KEY,
-    option TEXT NOT NULL
-    );
-
 spec:
   replicas: 1
   selector:
@@ -42,8 +48,11 @@ spec:
           volumeMounts:
             - mountPath: /var/lib/postgresql/data
               name: postgres-storage
-  
+            - mountPath: /docker-entrypoint-initdb.d/init.sql
+              subPath: init.sql
+              name: init-sql
 ---
+# postgres-service
 apiVersion: v1
 kind: Service
 metadata:
@@ -53,3 +62,4 @@ spec:
     app: postgres
   ports:
     - port: 5432
+      targetPort: 5432
