@@ -13,7 +13,7 @@ on:
 
 jobs:
   docker-steps:
-    runs-on: ubuntu-${GIT_SHA}
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
