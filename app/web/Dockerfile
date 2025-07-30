@@ -8,7 +8,7 @@ WORKDIR /app
 COPY . /app
 
 # Install dependencies specified in requirements.txt
-RUN pip install --no-cache-dir -r requirements.txt  && pip install pytest
+RUN pip install --no-cache-dir -r requirements.txt
 
 # ------------------- Stage 2: Final Stage ------------------------------
 
