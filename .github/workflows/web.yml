@@ -16,5 +16,5 @@ jobs:
     #   service-path: ./app/web
     #   image-name: web
     steps: 
-    - name: testing
-      run: echo "${{ secrets.DOCKER_PASSWORD }}"
+    - name: Log in to Docker Hub
+      run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
