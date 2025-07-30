@@ -10,7 +10,6 @@ on:
 jobs:
   docker-web:
     uses: ./.github/workflows/docker-testing.yml
-    working-directory: ./app
     with:
-      service-path: ./web
+      service-path: ./app/web
       image-name: web
