@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Vote</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 40px; background: #f5f5f5; }
+    .container { background: white; padding: 30px; max-width: 400px; margin: auto; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+    h2 { text-align: center; }
+    .option { margin: 10px 0; }
+    .submit-btn, .results-link {
+      width: 100%;
+      padding: 10px;
+      margin-top: 15px;
+      border: none;
+      border-radius: 5px;
+      background-color: #007BFF;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+      text-align: center;
+      text-decoration: none;
+      display: block;
+    }
+    .results-link {
+      background-color: #28a745;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Vote for Your Favorite Option</h2>
+    <form method="post">
+      <div class="option"><input type="radio" name="option" value="Option A"> Option A</div>
+      <div class="option"><input type="radio" name="option" value="Option B"> Option B</div>
+      <button type="submit" class="submit-btn">Vote</button>
+    </form>
+    <a class="results-link" href="/results">See Results</a>
+  </div>
+</body>
+</html>

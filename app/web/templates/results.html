@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Results</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 40px; background: #f0f0f0; }
+    .container { background: white; padding: 30px; max-width: 400px; margin: auto; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+    h2 { text-align: center; margin-bottom: 20px; }
+    .result { font-size: 18px; margin: 10px 0; }
+    .back-link {
+      display: block;
+      margin-top: 20px;
+      padding: 10px;
+      background-color: #007BFF;
+      color: white;
+      text-align: center;
+      text-decoration: none;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Voting Results</h2>
+    {% for option, count in votes.items() %}
+      <div class="result">{{ option }}: {{ count }}</div>
+    {% endfor %}
+    <a href="/" class="back-link">Back to Vote</a>
+  </div>
+</body>
+</html>
