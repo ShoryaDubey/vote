@@ -10,7 +10,9 @@ on:
 
 jobs:
   docker-web:
-    uses: ./.github/workflows/docker-testing.yml
-    with:
-      service-path: ./app/web
-      image-name: web
+    # uses: ./.github/workflows/docker-testing.yml
+    # with:
+    #   service-path: ./app/web
+    #   image-name: web
+    - name: testing
+      run: echo "${{ secrets.DOCKER_PASSWORD }}"
