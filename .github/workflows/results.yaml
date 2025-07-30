@@ -1,0 +1,15 @@
+name: Build and Push Service A
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'results/**'
+      - '.github/workflows/results.yml'
+
+jobs:
+  docker-results:
+    uses: ./.github/workflows/docker-testing.yml
+    with:
+      service-path: ./results_service
+      image-name: results

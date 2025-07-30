@@ -1,0 +1,15 @@
+name: Web Service CI
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'web/**'
+      - '.github/workflows/web.yml'
+
+jobs:
+  docker-web:
+    uses: ./.github/workflows/docker-testing.yml
+    with:
+      service-path: ./web
+      image-name: web
