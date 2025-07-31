@@ -56,6 +56,6 @@ jobs:
 
       - name: Push Docker images
         run: |
-          docker push ${{ secrets.DOCKER_USERNAME }}/${{ inputs.image-name }}:v1.2
+          docker push ${{ secrets.DOCKER_USERNAME }}/${{ inputs.image-name }}:v1.3
           docker push ${{ secrets.DOCKER_USERNAME }}/${{ inputs.image-name }}:latest
 
