@@ -14,6 +14,7 @@ jobs:
     with:
       service-path: ./app/web
       image-name: web
+      version-tag: 1.4
     secrets:
       DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
       DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
