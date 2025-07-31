@@ -38,12 +38,12 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/${{ inputs.image-name }}:${{ github.sha }} ${{ inputs.service-path }}
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/${{ inputs.image-name }}:v1.2 ${{ inputs.service-path }}
 
       - name: Scan with Trivy
         uses: aquasecurity/trivy-action@0.28.0
         with:
-          image-ref: '${{ secrets.DOCKER_USERNAME }}/${{ inputs.image-name }}:${{ github.sha }}'
+          image-ref: '${{ secrets.DOCKER_USERNAME }}/${{ inputs.image-name }}:v1.2'
           format: 'table'
           ignore-unfixed: true
           vuln-type: 'os,library'
