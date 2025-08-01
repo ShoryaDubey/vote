@@ -51,6 +51,7 @@
       width: 32px;
       height: 32px;
       margin-right: 15px;
+      border-radius: 50%;
     }
 
     .option input {
@@ -95,21 +96,31 @@
 </head>
 <body>
   <div class="container">
-    <h2>Vote for Your Favorite Option</h2>
-    <form method="post">
+    <h2>Vote for Your Favorite Person</h2>
+    <form method="post" onsubmit="return showVoteAlert();">
       <label class="option">
-        <input type="radio" name="option" value="Option A">
-        <img src="https://img.icons8.com/color/48/thumb-up.png" alt="Option A">
-        Option A
+        <input type="radio" name="option" value="Alice" required>
+        <img src="https://randomuser.me/api/portraits/women/1.jpg" alt="Alice">
+        Alice
       </label>
       <label class="option">
-        <input type="radio" name="option" value="Option B">
-        <img src="https://img.icons8.com/color/48/thumbs-down.png" alt="Option B">
-        Option B
+        <input type="radio" name="option" value="Bob">
+        <img src="https://randomuser.me/api/portraits/men/2.jpg" alt="Bob">
+        Bob
       </label>
       <button type="submit" class="submit-btn">Vote</button>
     </form>
     <a class="results-link" href="/results">See Results</a>
   </div>
+
+  <script>
+    function showVoteAlert() {
+      const selected = document.querySelector('input[name="option"]:checked');
+      if (selected) {
+        alert(`You voted for ${selected.value}`);
+      }
+      return true; // allow form submission
+    }
+  </script>
 </body>
 </html>
