@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: web
-          image: shorya1853/web:latest
+          image: shorya1853/web:v1.7.0
           imagePullPolicy: Always
           ports:
             - containerPort: 5000
