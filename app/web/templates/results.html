@@ -1,31 +1,94 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Results</title>
+  <title>Voting Results</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
-    body { font-family: Arial, sans-serif; padding: 40px; background: #f0f0f0; }
-    .container { background: white; padding: 30px; max-width: 400px; margin: auto; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
-    h2 { text-align: center; margin-bottom: 20px; }
-    .result { font-size: 18px; margin: 10px 0; }
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 40px;
+      background: linear-gradient(to right, #e0eafc, #cfdef3);
+    }
+    .container {
+      background: #fff;
+      padding: 30px;
+      max-width: 500px;
+      margin: auto;
+      border-radius: 12px;
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 30px;
+      font-size: 26px;
+      color: #333;
+    }
+    .result {
+      margin-bottom: 20px;
+    }
+    .result-label {
+      font-weight: 600;
+      margin-bottom: 5px;
+      display: flex;
+      justify-content: space-between;
+      font-size: 16px;
+    }
+    .progress-bar {
+      height: 18px;
+      background-color: #f1f1f1;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .progress {
+      height: 100%;
+      background-color: #4CAF50;
+      width: 0%;
+      text-align: center;
+      color: white;
+      line-height: 18px;
+      font-size: 12px;
+    }
     .back-link {
       display: block;
-      margin-top: 20px;
-      padding: 10px;
+      margin-top: 30px;
+      padding: 12px;
       background-color: #007BFF;
       color: white;
       text-align: center;
       text-decoration: none;
-      border-radius: 5px;
+      border-radius: 6px;
+      font-weight: bold;
+      transition: background 0.3s;
+    }
+    .back-link:hover {
+      background-color: #0056b3;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <h2>Voting Results</h2>
+    <h2><i class="fas fa-poll"></i> Voting Results</h2>
+    {% set total = votes.values() | sum %}
     {% for option, count in votes.items() %}
-      <div class="result">{{ option }}: {{ count }}</div>
+      {% set percent = (count / total * 100) if total > 0 else 0 %}
+      <div class="result">
+        <div class="result-label">
+          <span>{{ option }}</span>
+          <span>{{ count }} vote{{ 's' if count != 1 else '' }}</span>
+        </div>
+        <div class="progress-bar">
+          <div class="progress" data-width="{{ percent }}">{{ percent | round(1) }}%</div>
+        </div>
+      </div>
     {% endfor %}
-    <a href="/" class="back-link">Back to Vote</a>
+    <a href="/" class="back-link"><i class="fas fa-arrow-left"></i> Back to Vote</a>
   </div>
 </body>
+<script>
+  document.querySelectorAll('.progress').forEach(el => {
+    const percent = el.getAttribute('data-width');
+    el.style.width = percent + '%';
+  });
+</script>
 </html>
